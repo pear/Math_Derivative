@@ -5,7 +5,7 @@
 /**
  * Main file of the Math_Derivative PEAR Package
  *
- * PHP version 5
+ * PHP version 4 and 5
  * 
  * LICENSE: This source file is subject to version 3.0 of the PHP license
  * that is available through the world-wide-web at the following URI:
@@ -63,9 +63,9 @@ class Math_Derivative {
      *
      * @var string
      * @access protected
-     * @see Math_Derivative::definedx()
+     * @see Math_Derivative::setVariableName()
      */
-    protected $_d = 'x';
+    var $_d = 'x';
     
     /**
      * The operators' precedences table. It's not ment to change.
@@ -73,7 +73,7 @@ class Math_Derivative {
      * @var array
      * @access protected
      */
-    protected $_operatorsPrecedences = array('+' => 1, '-' => 1, '*' => 2, '/' => 3, '^' => 4);
+    var $_operatorsPrecedences = array('+' => 1, '-' => 1, '*' => 2, '/' => 3, '^' => 4);
     
     /**
      * The array that contains already calculated  intermediary expressions
@@ -81,7 +81,7 @@ class Math_Derivative {
      * @var array
      * @access protected
      */    
-    protected $_cache = array();
+    var $_cache = array();
     
     /**
      * Whether to use or not the cache
@@ -89,7 +89,7 @@ class Math_Derivative {
      * @var boolean
      * @access protected
      */ 
-    protected $_useCache = true;
+    var $_useCache = true;
     
     /**
      * Contains derivative forms of functions
@@ -98,15 +98,15 @@ class Math_Derivative {
      * @var array
      * @access protected
      */
-    protected $_registeredFunctions = array('sin' => 'cos(arg)*d(arg)',
-                                            'cos' => '-sin(arg)*d(arg)',
-                                            'tan' => '1/cos(arg)^2*d(arg)',
-                                            'ln'  => 'd(arg)/(arg)',
-                                            'log' => 'd(arg)/(arg)',
-                                            'e'   => 'd(arg)*e(arg)');
+    var $_registeredFunctions = array('sin' => 'cos(arg)*d(arg)',
+                                      'cos' => '-sin(arg)*d(arg)',
+                                      'tan' => '1/cos(arg)^2*d(arg)',
+                                      'ln'  => 'd(arg)/(arg)',
+                                      'log' => 'd(arg)/(arg)',
+                                      'e'   => 'd(arg)*e(arg)');
     
     // }}}
-    // {{{ definedx([(string) $value])
+    // {{{ setVariableName([(string) $value])
     
     /**
      * Defines the variable on which the expression depends.
@@ -122,9 +122,9 @@ class Math_Derivative {
      * @see Math_Derivative::getDerivative()
      */
     
-    protected function definedx($value = 'x')
+    function setVariableName($value = 'x')
     {
-        if (!ctype_alpha($value) && !empty($value)) {
+        if (!preg_match('/^[a-z]+$/i', $value)) {
             return false;
         }
     
@@ -151,7 +151,7 @@ class Math_Derivative {
      * @access public
      */ 
      
-    public function useCache($flag) 
+    function useCache($flag) 
     {
         $this->_useCache = (bool)$flag;
         
@@ -172,7 +172,7 @@ class Math_Derivative {
      * @access public
      */ 
 
-    public function resetCache($cache = array()) 
+    function resetCache($cache = array()) 
     {
         if (!is_array($cache)) {
             return false;
@@ -194,7 +194,7 @@ class Math_Derivative {
      * @access public
      */ 
 
-    public function getCache()
+    function getCache()
     {
         return $this->_cache;
     }
@@ -215,10 +215,10 @@ class Math_Derivative {
      * @access public
      */ 
      
-    public function getDerivative ($expression, $d, $level = 1) 
+    function getDerivative ($expression, $d, $level = 1) 
     {
         
-        $this->definedx($d);
+        $this->setVariableName($d);
 
         
         for($i = 0; $i < $level; $i++) {
@@ -241,7 +241,7 @@ class Math_Derivative {
      * @access protected
      */ 
 
-    public function cleanExpression($expression) 
+    function cleanExpression($expression) 
     {
 
         // clean surrounding whitespaces
@@ -294,7 +294,7 @@ class Math_Derivative {
      *
      * @access protected
      */     
-    protected function parse($expression) 
+    function parse($expression) 
     {
         
         $expression = $this->cleanExpression($expression);
@@ -312,7 +312,7 @@ class Math_Derivative {
         }
         
         // begins parsing
-        $deepness = 0;
+        $depth = 0;
 
         // array containing the positions of the main operators
         $main_operators = array('precedence' => 0, 'positions' => array());
@@ -320,17 +320,17 @@ class Math_Derivative {
         for ($i=0; $i < strlen($expression); $i++) {
             $char = $expression[$i];
 
-            if ($char == '(') {
-                $deepness++;
+            if ($char === '(') {
+                $depth++;
                 continue;
             }
             
-            if ($char == ')') {
-                $deepness--;
+            if ($char === ')') {
+                $depth--;
                 continue;
             } 
 
-            if ($deepness) {
+            if ($depth) {
                 continue;
             }
             
@@ -348,7 +348,7 @@ class Math_Derivative {
 
             }
         }
-        unset($deepness);
+        unset($depth);
         
         // splits the expression using operators' positions
         $pos = 0;
@@ -409,7 +409,7 @@ class Math_Derivative {
      * @access protected
      */  
     
-    protected function reliesOndx($expression) 
+    function reliesOndx($expression) 
     {
         return (bool) preg_match('/\b'.$this->_d.'\b/', $expression);
     }
@@ -430,7 +430,7 @@ class Math_Derivative {
      * @access protected
      */
 
-    protected function ruleAddition($parts) 
+    function ruleAddition($parts) 
     {
     
         $return_value = '';
@@ -438,7 +438,7 @@ class Math_Derivative {
         foreach ($parts as $i=>$part) {
             
             if ($i&1) {
-                if (strlen($return_value) || $part == '-') {
+                if (strlen($return_value) || $part === '-') {
                     $return_value .= $part;
                 }
                 continue;
@@ -476,13 +476,13 @@ class Math_Derivative {
      * @access protected
      */
      
-    protected function ruleMultiplication($parts)
+    function ruleMultiplication($parts)
     {
         
         $terms = array();
         
         foreach ($parts as $i=>$part) {
-            if ($i&1) {
+            if ($i & 1) {
                 continue;
             }
             
@@ -492,7 +492,7 @@ class Math_Derivative {
 
                 
             foreach ($parts as $j=>$otherPart) {
-                if ($i == $j || $j&1 || $otherPart === '1') {
+                if ($i === $j || $j & 1 || $otherPart === '1') {
                     continue;
                 }
                 
@@ -553,7 +553,7 @@ class Math_Derivative {
      * @access protected
      */
 
-    protected function ruleDivision($parts) 
+    function ruleDivision($parts) 
     {
 
         if (count($parts) > 3) {
@@ -587,7 +587,7 @@ class Math_Derivative {
      * @access protected
      */
 
-    protected function rulePower($parts) 
+    function rulePower($parts) 
     {
 
         if (count($parts) > 3) {
@@ -648,7 +648,7 @@ class Math_Derivative {
      * @access public
      */
      
-    public function registerFunction($name, $derivative) 
+    function registerFunction($name, $derivative) 
     {
         $this->_registeredFunctions[$name] = $derivative;
         return true;
@@ -668,7 +668,7 @@ class Math_Derivative {
      * @access protected
      */
      
-    protected function getDerivativeCallback($match) 
+    function getDerivativeCallback($match) 
     {
         $expression = preg_replace_callback('/d\s*(\(((?:[^()]+|(?1))+)\))/',  array(&$this, 'getDerivativeCallback'), $match[2]);
 
@@ -689,10 +689,10 @@ class Math_Derivative {
      *
      * @access protected
      */
-    protected function ruleTerm($part) 
+    function ruleTerm($part) 
     {
 
-        if ($part == $this->_d) {
+        if ($part === $this->_d) {
             return 1;
         } else if (preg_match('/^(\w+)\s*(\(((?:[^()]+|(?2))+)\))$/', $part, $match)) {
             // function detected
@@ -719,5 +719,3 @@ class Math_Derivative {
 }
 
 // }}}
-?>
-
