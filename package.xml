@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0">
+  <name>Math_Derivative</name>
+  <summary>Calculate the derivative of a mathematical expression</summary>
+  <description>This class allows you to calculate the derivative of an expression stored in a string.</description>
+  <maintainers>
+    <maintainer>
+      <user>colder</user>
+      <name>Etienne Kneuss</name>
+      <email>colder@php.net</email>
+      <role>lead</role>
+    </maintainer>
+  </maintainers>
+  <release>
+    <version>0.1</version>
+    <date>2006-02-15</date>
+    <license>PHP License</license>
+    <state>alpha</state>
+    <filelist>
+      <file role="php" baseinstalldir="Math" name="Derivative.php"/>
+    </filelist>
+  </release>
+  <changelog>
+	<release>
+		<version>0.1</version>
+		<date>2006-02-15</date>
+		<notes>First version</notes>
+	</release>
+  </changelog>
+</package>
