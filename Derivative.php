@@ -107,7 +107,14 @@ class Math_Derivative {
                                       'sqrt' => 'd((arg)^(1/2))',
                                       'acos' => '-1/((1-(arg)^2)^(1/2))',
                                       'asin' => '1/((1-(arg)^2)^(1/2))',
-                                      'atan' => '1/(1+(arg)^2)');
+                                      'atan' => '1/(1+(arg)^2)',
+                                      'sinh' => 'cosh(arg)*d(arg)',
+                                      'cosh' => 'sinh(arg)*d(arg)',
+                                      'tanh' => '(sech(arg)^2)*d(arg)',
+                                      'coth' => '-(csch(arg)^2)*d(arg)',
+                                      'sech' => '-sech(arg)*tanh(arg)*d(arg)',
+                                      'csch' => '-csch(arg)*coth(arg)*d(arg)',
+                                      );
     
     // }}}
     // {{{ setVariableName([(string) $value])
@@ -723,5 +730,4 @@ class Math_Derivative {
 }
 
 // }}}
-?>
 
