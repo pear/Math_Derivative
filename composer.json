@@ -1,0 +1,28 @@
+{
+    "authors": [
+        {
+            "email": "colder@php.net",
+            "name": "Etienne Kneuss",
+            "role": "Lead"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "./"
+        ]
+    },
+    "description": "More info available on: http://pear.php.net/package/Math_Derivative",
+    "license": "PHP License 3.01",
+    "name": "pear/math_derivative",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Math_Derivative",
+        "source": "https://github.com/pear/Math_Derivative"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
